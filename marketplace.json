@@ -1,13 +1,23 @@
 {
-  "name": "monaiq-ai-plugin",
+  "name": "Monaiq",
   "owner": {
     "name": "Sidub Inc."
   },
   "plugins": [
     {
-      "name": "monaiq",
+      "name": "monaiq-copilot",
       "source": "./copilot",
-      "description": "AI-powered software licensing and monetization platform with MCP tools, resources, and skills."
+      "description": "Make your code make money; get started in minutes with our AI automated implementation."
+    },
+    {
+      "name": "monaiq-claude",
+      "source": "./.claude-plugin",
+      "description": "Make your code make money; get started in minutes with our AI automated implementation."
+    },
+    {
+      "name": "monaiq-codex",
+      "source": "./codex",
+      "description": "Make your code make money; get started in minutes with our AI automated implementation."
     }
   ]
 }
