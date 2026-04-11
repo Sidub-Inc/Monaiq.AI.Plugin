@@ -1,0 +1,38 @@
+﻿# Monaiq skill invocation configuration
+# Tier 1 skills: auto-invocable (allow_implicit_invocation: true)
+# Tier 2/3 skills: explicit invocation only (allow_implicit_invocation: false)
+
+skills:
+  - name: analyze-codebase
+    path: ./skills/analyze-codebase/SKILL.md
+    allow_implicit_invocation: false
+  - name: design-monetization
+    path: ./skills/design-monetization/SKILL.md
+    allow_implicit_invocation: false
+  - name: domain-reference
+    path: ./skills/domain-reference/SKILL.md
+    allow_implicit_invocation: false
+  - name: getting-started
+    path: ./skills/getting-started/SKILL.md
+    allow_implicit_invocation: true
+  - name: implement-feature
+    path: ./skills/implement-feature/SKILL.md
+    allow_implicit_invocation: false
+  - name: implement-licensing
+    path: ./skills/implement-licensing/SKILL.md
+    allow_implicit_invocation: false
+  - name: implement-purchase-flow
+    path: ./skills/implement-purchase-flow/SKILL.md
+    allow_implicit_invocation: false
+  - name: manage-catalog
+    path: ./skills/manage-catalog/SKILL.md
+    allow_implicit_invocation: false
+  - name: profile-onboarding
+    path: ./skills/profile-onboarding/SKILL.md
+    allow_implicit_invocation: false
+  - name: scenario-advisor
+    path: ./skills/scenario-advisor/SKILL.md
+    allow_implicit_invocation: false
+  - name: troubleshoot-integration
+    path: ./skills/troubleshoot-integration/SKILL.md
+    allow_implicit_invocation: true
