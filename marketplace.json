@@ -1,0 +1,13 @@
+{
+  "name": "monaiq-ai-plugin",
+  "owner": {
+    "name": "Sidub Inc."
+  },
+  "plugins": [
+    {
+      "name": "monaiq",
+      "source": "./copilot",
+      "description": "AI-powered software licensing and monetization platform with MCP tools, resources, and skills."
+    }
+  ]
+}
