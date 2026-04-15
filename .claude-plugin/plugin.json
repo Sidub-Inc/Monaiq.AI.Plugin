@@ -1,4 +1,4 @@
-﻿{
+{
     "mcpServers":  "./.mcp.json",
     "description":  "AI-powered software licensing and monetization platform with MCP tools, resources, and skills.",
     "agents":  "./agents/",
