@@ -3,7 +3,7 @@
     "description":  "AI-powered software licensing and monetization platform with MCP tools, resources, and skills.",
     "agents":  "./agents/",
     "skills":  "./skills/",
-    "version":  "2.0.0",
+    "version":  "2.1.0",
     "author":  {
                    "name":  "Sidub Inc.",
                    "url":  "https://monaiq.com"
