@@ -1,0 +1,13 @@
+{
+  "name": "Monaiq",
+  "owner": {
+    "name": "Sidub Inc."
+  },
+  "plugins": [
+    {
+      "name": "monaiq-claude",
+      "source": "./",
+      "description": "Make your code make money; get started in minutes with our AI automated implementation."
+    }
+  ]
+}
