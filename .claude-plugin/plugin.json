@@ -1,8 +1,8 @@
 {
-    "mcpServers":  "./claude-plugin/.mcp.json",
+    "mcpServers":  "./.claude-plugin/.mcp.json",
     "description":  "AI-powered software licensing and monetization platform with MCP tools, resources, and skills.",
     "agents":  "./.claude-plugin/agents/",
-    "skills":  "./claude-plugin/skills/",
+    "skills":  "./.claude-plugin/skills/",
     "version":  "2.1.0",
     "author":  {
                    "name":  "Sidub Inc.",
