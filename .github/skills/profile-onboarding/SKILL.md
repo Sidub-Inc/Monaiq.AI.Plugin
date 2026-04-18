@@ -1,4 +1,4 @@
-﻿---
+---
 name: profile-onboarding
 description: View your reseller profile, retrieve your license key and API credentials, and review terms of service
 auto-invoke:
@@ -11,7 +11,6 @@ allowed-tools: [register_or_login, profile]
 argument-hint: ""
 tier: 3
 invoked-by: [getting-started]
-disable-model-invocation: true
 ---
 
 <input-context>

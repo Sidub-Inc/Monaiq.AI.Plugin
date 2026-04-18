@@ -1,4 +1,4 @@
-﻿---
+---
 name: implement-licensing
 description: Integrate the licensing SDK into your .NET or React app — install packages, configure credentials, register services, and verify at runtime
 auto-invoke:
@@ -11,7 +11,6 @@ allowed-tools: [register_or_login, profile, implement_base]
 argument-hint: "language (dotnet|react)"
 tier: 2
 invoked-by: [getting-started]
-disable-model-invocation: true
 ---
 
 <input-context>

@@ -1,4 +1,4 @@
-﻿---
+---
 name: implement-feature
 description: Add feature gates to your app — implement license checks for premium features (on/off) and usage limits (metered quotas)
 auto-invoke:
@@ -11,7 +11,6 @@ allowed-tools: [product, product_feature, implement_feature]
 argument-hint: "featureKey, featureType (access|ratelimit)"
 tier: 3
 invoked-by: [implement-licensing, manage-catalog]
-disable-model-invocation: true
 ---
 
 <input-context>

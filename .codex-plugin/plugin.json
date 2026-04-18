@@ -1,0 +1,40 @@
+﻿{
+    "interface":  {
+                      "developerName":  "Sidub Inc.",
+                      "displayName":  "Monaiq",
+                      "privacyPolicyURL":  "https://monaiq.com/privacy",
+                      "websiteURL":  "https://monaiq.com",
+                      "shortDescription":  "Add licensing, subscriptions, and feature gates to your .NET or React app",
+                      "termsOfServiceURL":  "https://monaiq.com/terms",
+                      "category":  "developer-tools"
+                  },
+    "mcpServers":  "./.mcp.json",
+    "description":  "Add licensing, subscriptions, and feature gates to your .NET or React app - AI-guided SDK integration, pricing design, and catalog management via OpenAI Codex.",
+    "skills":  "./.agents/skills/",
+    "version":  "2.0.0",
+    "author":  {
+                   "name":  "Sidub Inc.",
+                   "url":  "https://monaiq.com"
+               },
+    "name":  "monaiq",
+    "homepage":  "https://docs.monaiq.com",
+    "repository":  "https://github.com/Sidub-Inc/Sidub.Licensing",
+    "license":  "MIT",
+    "keywords":  [
+                     "licensing",
+                     "monetization",
+                     "saas",
+                     "sdk",
+                     "subscription",
+                     "feature-flags",
+                     "entitlements",
+                     "pricing-tiers",
+                     "trial",
+                     "paywall",
+                     "rate-limit",
+                     "dotnet",
+                     "react",
+                     "stripe",
+                     "licensing-as-a-service"
+                 ]
+}

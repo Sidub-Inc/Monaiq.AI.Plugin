@@ -1,4 +1,4 @@
-﻿---
+---
 name: manage-catalog
 description: Set up your product catalog in two questions — define products, features, and pricing tiers with smart defaults
 auto-invoke:
@@ -11,7 +11,6 @@ allowed-tools: [product, product_feature, offering, feature_offering]
 argument-hint: ""
 tier: 2
 invoked-by: [getting-started]
-disable-model-invocation: true
 ---
 
 <input-context>

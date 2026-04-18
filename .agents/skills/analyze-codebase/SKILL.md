@@ -1,4 +1,4 @@
-﻿---
+---
 name: analyze-codebase
 description: Scan your project to find features worth licensing — identifies premium capabilities and classifies each as a feature flag or usage limit
 auto-invoke:
@@ -11,7 +11,6 @@ allowed-tools: []
 argument-hint: ""
 tier: 2
 invoked-by: [getting-started]
-disable-model-invocation: true
 ---
 
 <input-context>

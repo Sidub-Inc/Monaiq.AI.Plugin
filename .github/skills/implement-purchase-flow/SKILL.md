@@ -1,4 +1,4 @@
-﻿---
+---
 name: implement-purchase-flow
 description: Add a buy button to your app — integrate Stripe checkout so users can purchase licenses without leaving your application
 auto-invoke:
@@ -11,7 +11,6 @@ allowed-tools: [offering, feature_offering, profile, implement_purchase_flow]
 argument-hint: "language (dotnet|react)"
 tier: 3
 invoked-by: [implement-licensing, manage-catalog]
-disable-model-invocation: true
 ---
 
 <input-context>

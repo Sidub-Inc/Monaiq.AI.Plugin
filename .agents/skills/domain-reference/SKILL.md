@@ -1,4 +1,4 @@
-﻿---
+---
 name: domain-reference
 description: Understand Monaiq concepts — explains entities like products, features, offerings, licenses, and how they relate to each other
 auto-invoke:
@@ -11,7 +11,6 @@ allowed-tools: []
 argument-hint: "topic (entities|features|offerings|licenses)"
 tier: 3
 invoked-by: [getting-started, manage-catalog, implement-licensing]
-disable-model-invocation: true
 ---
 
 <input-context>
