@@ -81,45 +81,45 @@ All 11 skills are preloaded, covering the full discovery-to-integration journey:
 url = "https://api.monaiq.com/runtime/webhooks/mcp"
 
 [[skills.config]]
-path = "./.agents/skills/getting-started/SKILL.md"
+path = "./skills/getting-started/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "./.agents/skills/manage-catalog/SKILL.md"
+path = "./skills/manage-catalog/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "./.agents/skills/implement-licensing/SKILL.md"
+path = "./skills/implement-licensing/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "./.agents/skills/implement-feature/SKILL.md"
+path = "./skills/implement-feature/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "./.agents/skills/implement-purchase-flow/SKILL.md"
+path = "./skills/implement-purchase-flow/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "./.agents/skills/troubleshoot-integration/SKILL.md"
+path = "./skills/troubleshoot-integration/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "./.agents/skills/analyze-codebase/SKILL.md"
+path = "./skills/analyze-codebase/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "./.agents/skills/scenario-advisor/SKILL.md"
+path = "./skills/scenario-advisor/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "./.agents/skills/design-monetization/SKILL.md"
+path = "./skills/design-monetization/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "./.agents/skills/domain-reference/SKILL.md"
+path = "./skills/domain-reference/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "./.agents/skills/profile-onboarding/SKILL.md"
+path = "./skills/profile-onboarding/SKILL.md"
 enabled = true

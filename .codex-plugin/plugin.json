@@ -1,22 +1,11 @@
 ﻿{
-    "interface":  {
-                      "developerName":  "Sidub Inc.",
-                      "displayName":  "Monaiq",
-                      "privacyPolicyURL":  "https://monaiq.com/privacy",
-                      "websiteURL":  "https://monaiq.com",
-                      "shortDescription":  "Add licensing, subscriptions, and feature gates to your .NET or React app",
-                      "termsOfServiceURL":  "https://monaiq.com/terms",
-                      "category":  "developer-tools"
-                  },
-    "mcpServers":  "./.mcp.json",
-    "description":  "Add licensing, subscriptions, and feature gates to your .NET or React app - AI-guided SDK integration, pricing design, and catalog management via OpenAI Codex.",
-    "skills":  "./.agents/skills/",
+    "name":  "monaiq",
     "version":  "2.0.0",
+    "description":  "Add licensing, subscriptions, and feature gates to your .NET or React app - AI-guided SDK integration, pricing design, and catalog management.",
     "author":  {
                    "name":  "Sidub Inc.",
                    "url":  "https://monaiq.com"
                },
-    "name":  "monaiq",
     "homepage":  "https://docs.monaiq.com",
     "repository":  "https://github.com/Sidub-Inc/Sidub.Licensing",
     "license":  "MIT",
@@ -36,5 +25,17 @@
                      "react",
                      "stripe",
                      "licensing-as-a-service"
-                 ]
+                 ],
+    "skills":  "skills/",
+    "agents":  ".codex/agents/",
+    "mcpServers":  ".mcp.json",
+    "interface":  {
+                      "displayName":  "Monaiq",
+                      "shortDescription":  "Add licensing, subscriptions, and feature gates to your .NET or React app",
+                      "developerName":  "Sidub Inc.",
+                      "category":  "developer-tools",
+                      "websiteURL":  "https://monaiq.com",
+                      "privacyPolicyURL":  "https://monaiq.com/privacy",
+                      "termsOfServiceURL":  "https://monaiq.com/terms"
+                  }
 }

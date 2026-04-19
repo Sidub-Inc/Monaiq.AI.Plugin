@@ -1,7 +1,20 @@
 ﻿---
 name: monaiq
 description: AI-powered licensing and monetization assistant with Discovery and Implementation modes
+skills:
+  - getting-started
+  - manage-catalog
+  - implement-licensing
+  - implement-feature
+  - implement-purchase-flow
+  - troubleshoot-integration
+  - analyze-codebase
+  - scenario-advisor
+  - design-monetization
+  - domain-reference
+  - profile-onboarding
 tools:
+  - 'monaiq/*'
   - register_or_login
   - getting_started
   - profile
