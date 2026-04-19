@@ -26,16 +26,25 @@
                      "stripe",
                      "licensing-as-a-service"
                  ],
-    "skills":  "skills/",
-    "agents":  ".codex/agents/",
-    "mcpServers":  ".mcp.json",
+    "skills":  "./skills/",
+    "mcpServers":  "./.mcp.json",
     "interface":  {
                       "displayName":  "Monaiq",
                       "shortDescription":  "Add licensing, subscriptions, and feature gates to your .NET or React app",
+                      "longDescription":  "Add licensing, subscriptions, and feature gates to your .NET or React app - AI-guided SDK integration, pricing design, and catalog management.",
                       "developerName":  "Sidub Inc.",
-                      "category":  "developer-tools",
+                      "category":  "Productivity",
+                      "capabilities":  [
+                                           "Read",
+                                           "Write"
+                                       ],
                       "websiteURL":  "https://monaiq.com",
                       "privacyPolicyURL":  "https://monaiq.com/privacy",
-                      "termsOfServiceURL":  "https://monaiq.com/terms"
+                      "termsOfServiceURL":  "https://monaiq.com/terms",
+                      "brandColor":  "#6366F1",
+                      "defaultPrompt":  [
+                                            "Use Monaiq to add licensing to my .NET app.",
+                                            "Use Monaiq to design a pricing tier for my SaaS product."
+                                        ]
                   }
 }
