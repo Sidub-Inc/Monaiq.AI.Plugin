@@ -25,8 +25,5 @@
                      "react",
                      "stripe",
                      "licensing-as-a-service"
-                 ],
-    "skills":  "./skills/",
-    "agents":  "./agents/",
-    "mcpServers":  "./.mcp.json"
+                 ]
 }
