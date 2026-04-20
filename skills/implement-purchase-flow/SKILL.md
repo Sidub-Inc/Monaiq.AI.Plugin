@@ -1,4 +1,4 @@
-﻿---
+---
 name: implement-purchase-flow
 description: Add a buy button to your app — integrate Stripe checkout so users can purchase licenses without leaving your application
 auto-invoke:
@@ -7,11 +7,10 @@ auto-invoke:
   - "User asks how to embed a buy button or purchase flow"
 tags: [sdk, checkout, purchase, licensing, stripe]
 category: integration
-allowed-tools: [offering, feature_offering, profile, implement_purchase_flow]
+allowed-tools: [offering, feature_offering, profile, implement_purchase_flow, mcp__plugin_monaiq_monaiq__offering, mcp__plugin_monaiq_monaiq__feature_offering, mcp__plugin_monaiq_monaiq__profile, mcp__plugin_monaiq_monaiq__implement_purchase_flow]
 argument-hint: "language (dotnet|react)"
 tier: 3
 invoked-by: [implement-licensing, manage-catalog]
-disable-model-invocation: true
 ---
 
 <input-context>

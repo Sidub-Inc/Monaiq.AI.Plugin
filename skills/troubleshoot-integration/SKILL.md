@@ -8,7 +8,7 @@ auto-invoke:
   - "User reports a specific error message, exception, or HTTP status code related to licensing"
 tags: [integration, troubleshooting, diagnostics, errors]
 category: integration
-allowed-tools: [register_or_login, profile, product, offering]
+allowed-tools: [register_or_login, profile, product, offering, mcp__plugin_monaiq_monaiq__register_or_login, mcp__plugin_monaiq_monaiq__profile, mcp__plugin_monaiq_monaiq__product, mcp__plugin_monaiq_monaiq__offering]
 argument-hint: "errorCategory (setup|auth|validation|consumption)"
 tier: 1
 invoked-by: [user]

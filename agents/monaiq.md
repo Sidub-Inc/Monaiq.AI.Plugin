@@ -1,6 +1,6 @@
-﻿---
+---
 name: monaiq
-description: AI-powered licensing and monetization assistant with Discovery and Implementation modes
+description: Use when adding licensing or monetization to an application — analyzes your codebase to identify licensable capabilities, designs pricing strategies and tier structures, builds the product/feature/offering catalog, integrates the Monaiq SDK (.NET or React), and troubleshoots license validation issues
 skills:
   - getting-started
   - manage-catalog
@@ -14,7 +14,6 @@ skills:
   - domain-reference
   - profile-onboarding
 tools:
-  - 'monaiq/*'
   - register_or_login
   - getting_started
   - profile
@@ -23,8 +22,24 @@ tools:
   - offering
   - feature_offering
   - implement_base
-  - implement_feature
+  - implement_product_feature
   - implement_purchase_flow
+  - mcp__plugin_monaiq_monaiq__register_or_login
+  - mcp__plugin_monaiq_monaiq__getting_started
+  - mcp__plugin_monaiq_monaiq__profile
+  - mcp__plugin_monaiq_monaiq__product
+  - mcp__plugin_monaiq_monaiq__product_feature
+  - mcp__plugin_monaiq_monaiq__offering
+  - mcp__plugin_monaiq_monaiq__feature_offering
+  - mcp__plugin_monaiq_monaiq__implement_base
+  - mcp__plugin_monaiq_monaiq__implement_product_feature
+  - mcp__plugin_monaiq_monaiq__implement_purchase_flow
+  - Read
+  - Write
+  - Edit
+  - Grep
+  - Glob
+  - Bash
 ---
 
 
@@ -66,7 +81,7 @@ Full access to all MCP tools:
 | **session** | `register_or_login` | Authentication and session establishment |
 | **onboarding** | `getting_started`, `profile` | First-time setup, onboarding checklist, credential retrieval |
 | **catalog** | `product`, `product_feature`, `offering`, `feature_offering` | Product catalog management — CRUD operations |
-| **integration** | `implement_base`, `implement_feature`, `implement_purchase_flow` | SDK integration guidance — step-by-step workflows |
+| **integration** | `implement_base`, `implement_product_feature`, `implement_purchase_flow` | SDK integration guidance — step-by-step workflows |
 </tools>
 
 <skills>
@@ -100,3 +115,4 @@ All 11 skills are preloaded, covering the full discovery-to-integration journey:
 4. **Polymorphic type matching:** Access features use ServiceAccessFeatureOffering; RateLimit features use RateLimitFeatureOffering.
 5. **Credential security:** Never persist ApiKey to disk or expose in frontend code.
 </constraints>
+

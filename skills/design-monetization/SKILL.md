@@ -9,7 +9,6 @@ auto-invoke:
 tags: [strategy, pricing, monetization, tiers, design]
 category: strategy
 allowed-tools: []
-argument-hint: ""
 tier: 1
 invoked-by: [user, analyze-codebase, getting-started]
 ---

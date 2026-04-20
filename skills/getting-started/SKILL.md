@@ -8,8 +8,7 @@ auto-invoke:
   - "User asks 'where do I start' or 'how do I begin' with licensing"
 tags: [onboarding, getting-started, orchestration, state-detection]
 category: onboarding
-allowed-tools: [register_or_login, getting_started, profile, product, offering]
-argument-hint: ""
+allowed-tools: [register_or_login, getting_started, profile, product, offering, mcp__plugin_monaiq_monaiq__register_or_login, mcp__plugin_monaiq_monaiq__getting_started, mcp__plugin_monaiq_monaiq__profile, mcp__plugin_monaiq_monaiq__product, mcp__plugin_monaiq_monaiq__offering]
 tier: 1
 invoked-by: [user]
 ---

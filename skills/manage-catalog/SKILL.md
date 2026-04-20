@@ -1,4 +1,4 @@
-﻿---
+---
 name: manage-catalog
 description: Set up your product catalog in two questions — define products, features, and pricing tiers with smart defaults
 auto-invoke:
@@ -7,11 +7,9 @@ auto-invoke:
   - "User asks how to define pricing tiers or feature assignments"
 tags: [catalog, products, features, offerings, orchestration]
 category: catalog
-allowed-tools: [product, product_feature, offering, feature_offering]
-argument-hint: ""
+allowed-tools: [product, product_feature, offering, feature_offering, mcp__plugin_monaiq_monaiq__product, mcp__plugin_monaiq_monaiq__product_feature, mcp__plugin_monaiq_monaiq__offering, mcp__plugin_monaiq_monaiq__feature_offering]
 tier: 2
 invoked-by: [getting-started]
-disable-model-invocation: true
 ---
 
 <input-context>

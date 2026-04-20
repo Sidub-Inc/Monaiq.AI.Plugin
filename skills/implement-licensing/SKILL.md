@@ -1,4 +1,4 @@
-﻿---
+---
 name: implement-licensing
 description: Integrate the licensing SDK into your .NET or React app — install packages, configure credentials, register services, and verify at runtime
 auto-invoke:
@@ -7,11 +7,10 @@ auto-invoke:
   - "User asks how to set up Monaiq licensing in code — not asking about pricing or catalog design"
 tags: [sdk, integration, licensing, setup, dotnet, react]
 category: integration
-allowed-tools: [register_or_login, profile, implement_base]
+allowed-tools: [register_or_login, profile, implement_base, mcp__plugin_monaiq_monaiq__register_or_login, mcp__plugin_monaiq_monaiq__profile, mcp__plugin_monaiq_monaiq__implement_base]
 argument-hint: "language (dotnet|react)"
 tier: 2
 invoked-by: [getting-started]
-disable-model-invocation: true
 ---
 
 <input-context>

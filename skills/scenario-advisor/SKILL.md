@@ -1,4 +1,4 @@
-﻿---
+---
 name: scenario-advisor
 description: Find the right licensing model for your app — compare subscription, perpetual, trial, and usage-based options tailored to your application type
 auto-invoke:
@@ -11,7 +11,6 @@ allowed-tools: []
 argument-hint: "appType (saas|desktop|plugin|package|cli|api)"
 tier: 3
 invoked-by: [analyze-codebase, getting-started]
-disable-model-invocation: true
 ---
 
 <input-context>

@@ -1,4 +1,4 @@
-﻿---
+---
 name: profile-onboarding
 description: View your reseller profile, retrieve your license key and API credentials, and review terms of service
 auto-invoke:
@@ -7,11 +7,9 @@ auto-invoke:
   - "User asks about their onboarding status or account details"
 tags: [profile, onboarding, credentials, terms]
 category: onboarding
-allowed-tools: [register_or_login, profile]
-argument-hint: ""
+allowed-tools: [register_or_login, profile, mcp__plugin_monaiq_monaiq__register_or_login, mcp__plugin_monaiq_monaiq__profile]
 tier: 3
 invoked-by: [getting-started]
-disable-model-invocation: true
 ---
 
 <input-context>

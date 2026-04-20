@@ -1,4 +1,4 @@
-﻿---
+---
 name: implement-feature
 description: Add feature gates to your app — implement license checks for premium features (on/off) and usage limits (metered quotas)
 auto-invoke:
@@ -7,11 +7,10 @@ auto-invoke:
   - "User asks how to gate functionality by license features"
 tags: [sdk, features, licensing, entitlements, access, ratelimit]
 category: integration
-allowed-tools: [product, product_feature, implement_feature]
+allowed-tools: [product, product_feature, implement_product_feature, mcp__plugin_monaiq_monaiq__product, mcp__plugin_monaiq_monaiq__product_feature, mcp__plugin_monaiq_monaiq__implement_product_feature]
 argument-hint: "featureKey, featureType (access|ratelimit)"
 tier: 3
 invoked-by: [implement-licensing, manage-catalog]
-disable-model-invocation: true
 ---
 
 <input-context>
@@ -181,7 +180,7 @@ async function consumeFeature(client, featureKey, amount) {
 
 ## Related Tools
 
-- `implement_feature` — Interactive step-by-step feature integration guidance
+- `implement_product_feature` — Interactive step-by-step feature integration guidance
 - `product` — List products in the catalog
 - `product_feature` — List features for a product
 - `implement_base` — SDK integration (prerequisite)
