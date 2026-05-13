@@ -1,16 +1,21 @@
 ---
 name: analyze-codebase
-description: Scan your project to find features worth licensing — identifies premium capabilities and classifies each as a feature flag or usage limit
+description: "Use when: analyzing an existing codebase to identify licensable capabilities, premium features, API quotas, exports, integrations, or monetization candidates; classifies findings as access gates or rate limits."
+agent: monaiq
 auto-invoke:
   - "User wants to identify what capabilities in their app could be licensed or monetized"
   - "User asks what parts of their codebase are licensable or worth gating"
   - "User wants help figuring out what to monetize in their application — has existing code to analyze"
 tags: [discovery, analysis, codebase, capabilities]
 category: discovery
-allowed-tools: []
+allowed-tools: [Read, Grep, Glob, product_feature, fetch_step_resources, monaiq_journal, mcp__plugin_monaiq_monaiq__product_feature, mcp__plugin_monaiq_monaiq__fetch_step_resources, mcp__plugin_monaiq_monaiq__monaiq_journal]
 tier: 2
 invoked-by: [getting-started]
 ---
+
+<objective>
+Analyze an existing app and produce an evidence packet of licensable capabilities, classified as Access or RateLimit features, with suggested FeatureKey values and downstream routing. This skill is read-only except for journal updates.
+</objective>
 
 <input-context>
 Receives from getting-started:
@@ -28,29 +33,35 @@ Provides to scenario-advisor:
 Discovery chain: analyze-codebase [capabilities] → scenario-advisor [selectedScenario] → design-monetization [pricingPlan] → manage-catalog
 </output-context>
 
-<state-detection>
-Before scanning:
-1. Check if previous analysis exists in conversation context
-2. If `detectedState.hasProducts`, call `product_feature` (list) to compare existing features against codebase findings
+<execution_context>
+Follows the skill layout and shared workflows in `_shared/protocols.md`. This skill contributes only read-only codebase evidence, capability classification, and downstream discovery handoff. Uses `_shared/workflows/checkpoint.md` for `CHECKPOINT-ANALYSIS-SCOPE`.
+</execution_context>
 
-Based on state:
-- No prior analysis → Full scan (Step 1-3)
-- Prior analysis exists → Show previous results, ask if user wants to rescan
-- Existing catalog features → Highlight gaps (capabilities not yet in catalog)
-</state-detection>
+<monaiq-agent-handoff>
+Follow the Direct Invocation Contract in `_shared/protocols.md` (mutation-capable variant — journal startup applies because catalog gap analysis writes journal evidence).
+</monaiq-agent-handoff>
 
-<objective>
-Analyze a user's project to identify capabilities worth licensing. Read project configuration files and key source files (controllers, services, middleware) to produce a structured table of identified capabilities with suggested feature key (the unique identifier for this capability), feature type — either a feature flag (called an Access feature in Monaiq) or a usage limit (called a RateLimit feature in Monaiq) — and reasoning.
-</objective>
+<workflow>
+1. Run `_shared/workflows/startup.md` for `analyze-codebase`.
+2. **Response Pattern.** Follow `_shared/protocols.md` § Response Pattern. The gate this skill owns is **codebase-evidence emission**. Evidence sources, in priority order: detected project files (csproj/package.json/manifests), business-code areas matching scenario taxonomy, existing `product_feature` list when catalog exists, prior journal analyses, `monaiq://patterns/scenarios`, `monaiq://platforms/api-surface/{platform}`. The recommendation is the classified capability list with FeatureKey suggestions, not a question about which capabilities to include.
+3. Resolve `monaiq://patterns/scenarios`, `monaiq://domain/model`, and platform resources such as `monaiq://platforms/api-surface/{platform}` or `monaiq://platforms/pitfalls/{platform}` when the stack is known before classifying capabilities. Stop before recommendation if taxonomy or domain context is unavailable.
+3. Determine scan scope from route context, prior journal state, existing conversation analysis, and project structure. Use `CHECKPOINT-ANALYSIS-SCOPE` before broad scans or scope changes.
+4. If products exist, call `product_feature` list and compare catalog features against codebase findings so the output can distinguish existing coverage from gaps.
+5. Scan project configuration and key business-code areas. Keep evidence bounded: file paths, area summaries, observed patterns, and confidence; do not quote secrets or dump full files.
+6. Classify findings as Access or RateLimit features using fetched scenario/domain taxonomy. Generate stable suggested FeatureKey values.
+7. Present the evidence packet using `_shared/response-patterns.md` "Evidence Backing" plus source areas.
+8. If missing or stale evidence prevents a confident recommendation, route to `analyze-codebase`, profile/catalog state detection, or the narrowest prerequisite journey step before catalog/pricing recommendations.
+9. Output the codebase evidence packet for `scenario-advisor`, coalesce analysis artifacts, checklist progress, and handoff context into the completion workflow, then call `skill_completed` once.
+</workflow>
 
-<process>
+<reference>
+## State Routing Reference
 
-## Prerequisites
+- No prior analysis -> full scan.
+- Prior analysis exists -> summarize prior findings and rescan only if scope changed or evidence is stale.
+- Existing catalog features -> highlight gaps between source capabilities and catalog features.
 
-- Fetch `monaiq://patterns/scenarios` for feature type taxonomy and classification guidance
-- Fetch `monaiq://domain/model` for entity context
-
-## Step 1: Scan Project Structure
+## Scan Project Structure
 
 Perform a deep scan of the user's project:
 
@@ -58,7 +69,7 @@ Perform a deep scan of the user's project:
 - Identify the tech stack (React, .NET, Node, etc.) and project structure
 - Determine key directories containing business logic (controllers, services, middleware, routes, API handlers)
 
-## Step 2: Identify Licensable Capabilities
+## Identify Licensable Capabilities
 
 Read key source files — controllers, services, middleware, route handlers — and identify capabilities that could be gated:
 
@@ -71,7 +82,7 @@ Read key source files — controllers, services, middleware, route handlers — 
 
 For each identified capability, note the source file, the functionality, and why it's licensable.
 
-## Step 3: Classify Capabilities
+## Classify Capabilities
 
 Using the feature type taxonomy from `monaiq://patterns/scenarios`, classify each capability:
 
@@ -80,7 +91,7 @@ Using the feature type taxonomy from `monaiq://patterns/scenarios`, classify eac
 
 Apply the heuristic: "Is the answer yes/no?" → Feature flag. "Is the answer how many?" → Usage limit.
 
-## Step 4: Present Findings
+## Present Findings
 
 Present a structured table of identified capabilities:
 
@@ -90,16 +101,17 @@ Present a structured table of identified capabilities:
 
 Follow with a brief narrative summary: how many capabilities were found, the split between access-gate and rate-limited, and observations about the application's licensing potential.
 
-## Step 5: Suggest Next Step
+## Suggest Next Step
 
 After presenting findings, suggest: "To map these capabilities to a licensing scenario, run the `scenario-advisor` skill with these findings."
 
-</process>
+</reference>
 
 <success_criteria>
 - Project config files and key source files were read (not just config)
 - Each identified capability has a suggested FeatureKey, feature type classification, and reasoning
 - Classifications align with `monaiq://patterns/scenarios` feature type taxonomy
+- Findings distinguish existing catalog coverage from codebase gaps when product features are available
 - Findings presented as structured table plus narrative summary
 - `scenario-advisor` suggested as next step
 </success_criteria>

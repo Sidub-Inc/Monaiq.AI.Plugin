@@ -36,7 +36,13 @@
                       "category":  "Productivity",
                       "capabilities":  [
                                            "Read",
-                                           "Write"
+                                           "Write",
+                                           "Edit",
+                                           "Shell",
+                                           "Search",
+                                           "Web",
+                                           "MCP",
+                                           "Subagents"
                                        ],
                       "websiteURL":  "https://monaiq.com",
                       "privacyPolicyURL":  "https://monaiq.com/privacy",

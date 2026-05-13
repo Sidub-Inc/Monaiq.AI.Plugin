@@ -1,198 +1,150 @@
 ---
 name: implement-feature
-description: Add feature gates to your app — implement license checks for premium features (on/off) and usage limits (metered quotas)
+description: "Use when: adding Monaiq feature gates, access checks, premium feature enforcement, rate-limit assertions, consumption recording, or license feature checks to an SDK-integrated app."
+agent: monaiq
 auto-invoke:
   - "User wants to add feature gating to their application"
   - "User wants to implement license feature checks"
   - "User asks how to gate functionality by license features"
 tags: [sdk, features, licensing, entitlements, access, ratelimit]
 category: integration
-allowed-tools: [product, product_feature, implement_product_feature, mcp__plugin_monaiq_monaiq__product, mcp__plugin_monaiq_monaiq__product_feature, mcp__plugin_monaiq_monaiq__implement_product_feature]
+allowed-tools: [Read, Write, Edit, Grep, Glob, Bash, product, product_feature, feature_offering, implement_product_feature, fetch_step_resources, monaiq_journal, mcp__plugin_monaiq_monaiq__product, mcp__plugin_monaiq_monaiq__product_feature, mcp__plugin_monaiq_monaiq__feature_offering, mcp__plugin_monaiq_monaiq__implement_product_feature, mcp__plugin_monaiq_monaiq__fetch_step_resources, mcp__plugin_monaiq_monaiq__monaiq_journal]
 argument-hint: "featureKey, featureType (access|ratelimit)"
 tier: 3
 invoked-by: [implement-licensing, manage-catalog]
 ---
 
-<input-context>
-Receives from implement-licensing:
-- sdkConfig: { language, credentialSource, serviceOptionsConfigured, diRegistered } — confirms SDK is ready
-- targetFeatures (optional): [{ featureKey, featureType }] — pre-selected features to implement
-
-If invoked without upstream context, verifies SDK integration exists and discovers features from catalog.
-</input-context>
-
-<output-context>
-Provides to downstream skills:
-- featureImpl: { implementedFeatures: [{ featureKey, featureType, codeFile }], buildVerified: boolean }
-
-This is typically the last step in the implementation chain:
-getting-started → manage-catalog → implement-licensing → implement-feature
-</output-context>
-
-<state-detection>
-Before implementing feature checks:
-1. Verify SDK is integrated — look for licensing package references and DI registration
-2. Call `product_feature` (list) — get available features and their types
-3. Check existing code for feature assertions — look for existing `ServiceAccessLicenseAssertion` or `RateLimitLicenseAssertion` calls
-
-Based on detected state:
-- SDK not integrated → Route to implement-licensing first
-- No features in catalog → Route to manage-catalog to create features
-- Features exist, none implemented → Full flow from Step 1
-- Some features already implemented → Show which are done, offer to implement remaining
-</state-detection>
-
 <objective>
-Guide an agent through adding license feature checks to a .NET or React application. Features are polymorphic — **feature flags** (Access — binary gate: allowed or denied) and **usage limits** (RateLimit — metered consumption tracking). Covers feature discovery, implementation of the correct assertion pattern, and build verification.
+Add license feature checks to an SDK-integrated .NET or React app without guessing SDK APIs or hiding premium capability state. The skill handles feature discovery, checkpointed implementation planning, authoritative tool guidance, build validation, and journal completion.
 </objective>
 
-<process>
+<monaiq-agent-handoff>
+Follow the Direct Invocation Contract in `_shared/protocols.md` (mutation-capable variant — business-logic edits require `CHECKPOINT-PRE-BUSINESS-LOGIC-EDIT`).
+</monaiq-agent-handoff>
 
-## Prerequisites
+<execution_context>
+Follows the skill layout and shared workflows in `_shared/protocols.md`. This skill contributes only feature-gate, rate-limit, consumption, and validation decisions.
+</execution_context>
 
-- Licensing SDK already integrated (complete the `implement-licensing` skill first)
-- Product and features exist in the catalog — use the `product` and `product_feature` tools to verify
-- Fetch the domain model from `monaiq://domain/model` to understand entity relationships
-- Fetch the namespace reference from `monaiq://domain/namespaces` for type locations
+<input-output-contract>
+Input from `implement-licensing`: `sdkConfig` plus optional `targetFeatures`. Direct invocation must recreate that context by checking SDK setup and catalog feature state.
 
-## Step 1: Discover Feature
+Output: `featureImpl: { implementedFeatures: [{ featureKey, featureType, codeFile }], buildVerified: boolean }`.
+</input-output-contract>
 
-Identify the feature to gate and determine its type.
+<tool-first-authority>
+implement_product_feature is authoritative for feature-gate implementation. Use `implement_product_feature` and `fetch_step_resources` as the normal implementation guidance paths before code/config/business-logic changes.
 
-**Use the `product_feature` tool** to list features for a product. Each feature has:
+SDK reverse-engineering is a plugin guidance defect. Do not inspect DLLs. Do not inspect XML documentation. Do not inspect NuGet package caches. Do not inspect generated binaries to discover SDK signatures, namespaces, assertion types, feature records, or runtime behavior.
 
-| Field | Purpose |
-|-------|---------|
-| `FeatureKey` | The feature key (the unique identifier you defined in your catalog) used in code to reference this feature |
-| `Kind` | `ServiceAccess` or `RateLimit` — determines the assertion pattern |
-| `DisplayName` | Human-readable name |
-| `ServiceType` | (Access only) The service type classification |
+If Monaiq tool or resource guidance is missing, contradictory, or insufficient, stop before code/config/business-logic changes and record a plugin guidance defect with monaiq_journal record_error.
+</tool-first-authority>
 
-**Feature Type Comparison:**
+<checkpoint-workflow-directive>
+For `CHECKPOINT-FEATURE-SELECTION`, `CHECKPOINT-PRE-BUSINESS-LOGIC-EDIT`, and any other hard checkpoint, follow `_shared/workflows/checkpoint.md` exactly. Use `checkpoint` in `monaiq_journal save_checkpoint` payloads, record the user's `result`, apply returned `.monaiq/*` file operations, and verify the checkpoint file exists before business-logic edits continue.
+</checkpoint-workflow-directive>
+
+<workflow>
+1. Run `_shared/workflows/startup.md` for `implement-feature`.
+2. **Response Pattern.** Follow `_shared/protocols.md` § Response Pattern. The gate this skill owns is **feature implementation (business-logic edits)**. Evidence sources, in priority order: selected feature from route packet/journal, existing UI/business-logic locations in `targetProject`, SDK integration state from `implement-licensing`, catalog/offering facts, journal decisions, `monaiq://platforms/api-surface/{platform}`, `monaiq://docs/anti-patterns/{platform}`, `monaiq://platforms/pitfalls/{platform}`. Per-stack code shapes live in `monaiq://sdk/{stack}/setup` and the `implement_product_feature` server response — do not embed framework-specific code in this skill source.
+3. Resume through `CHECKPOINT-RESUME` when the state packet is current; call additional journal startup actions only when the shared startup workflow reports missing or stale state.
+3. Read the master journey checklist from `.monaiq/STATE.md`; this skill owns only the feature implementation gate. Establish prerequisites in this order: SDK integration present, product features available, platform resources fetched, existing feature checks scanned. Missing SDK routes to `implement-licensing`; missing catalog features route to `manage-catalog`.
+4. Fetch required resources before implementation: `monaiq://domain/model`, `monaiq://domain/namespaces`, `monaiq://platforms/api-surface/{platform}`, `monaiq://docs/anti-patterns/{platform}`, `monaiq://sdk/{stack}/setup`, and `monaiq://platforms/pitfalls/{platform}`.
+5. Use evidence before asking a new question. Infer the feature path from the selected feature, route packet, existing UI/business-logic location, SDK state, catalog/offering facts, and journal decisions. You must confirm inferred decisions in the next existing checkpoint, especially `CHECKPOINT-FEATURE-SELECTION` or `CHECKPOINT-PRE-BUSINESS-LOGIC-EDIT`, with labeled assumptions for credential handling impact, checkout architecture impact, feature path, and next steps. Do not add a new checkpoint name solely for evidence inference.
+6. Present the plan using `_shared/response-patterns.md` "Evidence Backing" plus selected feature, feature kind, source files/areas, and validation plan.
+7. Call `implement_product_feature` with `startStep=all` when context is sufficient; use `startStep=1` then `startStep=2` only when step-by-step review improves safety.
+8. Stop at `CHECKPOINT-PRE-BUSINESS-LOGIC-EDIT` before adding or changing feature gates, access checks, rate-limit assertions, consumption recording, UI locked states, or other business logic. Record the user's approval result before edits.
+9. Apply code changes using the authoritative tool/resource guidance only. If guidance is missing, contradictory, or insufficient, stop and record a plugin guidance defect with `monaiq_journal record_error`.
+10. Build and exercise allow, denied, expired/misconfigured, and over-limit paths where applicable. Record validation failures with `monaiq_journal record_validation_failure` before remediation.
+11. Coalesce changed paths, validation proof, feature implementation checklist progress, and `featureImpl` handoff through `_shared/workflows/completion.md`; use `record_file_changes` only when changed paths exist. Call `update_checklist_progress` for feature implementation only after source skill, relevant MCP tool, canonical resources, and checkpoint/journal evidence prove the gate is complete before marking the checklist gate complete. Save `CHECKPOINT-SKILL-COMPLETE` with `proofOfDone` only when useful, apply returned file operations using the **File Operation Application Protocol** in `_shared/protocols.md`, then call `skill_completed` once and hand off persisted `featureImpl` or `validationProof`.
+</workflow>
+
+<experience-contract>
+## Locked Feature Experience Contract
+
+Keep premium capabilities visible, valuable, and safely locked. A denied user should understand what the capability does, why it is unavailable, and which unlock or recovery path fits the current task before protected execution fails. Do not hide premium affordances when showing a visible locked state would improve product understanding.
+
+backend/business-logic enforcement is authoritative. frontend checks are for frontend state communication: loading, available, locked, expired, over-limit, and misconfigured states. Reuse the existing provider, authorization cache, and state snapshot rather than duplicating authorization calls across every component. Backend/business-logic enforcement must still guard the protected action.
+
+locked, expired, over-limit, and misconfigured outcomes need distinct user messages and actions. Locked means upgrade or activate; expired means renew or contact the buyer; over-limit means retry after reset or upgrade; misconfigured means recover setup or contact support. Authorization and rate-limit exceptions are product and diagnostic signals and must not be silently swallowed; preserve them in logs, journals, telemetry, or validation output before translating them to user-facing recovery.
+
+Rate-limit experiences must treat unlimited and capped as explicit states. For capped usage, show current usage, remaining quota, reset cadence, meaningful warning threshold guidance before exhaustion, deterministic denial at the limit, and a recovery path such as wait for reset, retry later, or upgrade. For unlimited usage, say unlimited rather than implying a hidden quota.
+
+Use host-native UI quality: compact, accessible, responsive, aligned with the source app's component system, and persuasive without becoming marketing-heavy. Before changing business logic or UI, use `CHECKPOINT-PRE-BUSINESS-LOGIC-EDIT` and summarize affected pages, components, flows, and user-visible impact.
+
+</experience-contract>
+
+<reference>
+## Feature Discovery Reference
+
+Identify the feature to gate and determine its type. Use the `product_feature` tool to list features for a product. Each feature exposes its key, kind, display name, and access-specific service type. Each feature type has its own assertion pattern: Access features are binary allowed/denied gates; RateLimit features require feature retrieval, consumption recording, and assertion. Resolve `monaiq://platforms/api-surface/{platform}` and `monaiq://domain/model` for exact platform types, enum values, and call sequence.
+
+## Feature-Type Decision Table
 
 | Aspect | Feature Flag (Access) | Usage Limit (RateLimit) |
-|--------|---------------------|---------------------|
+|--------|----------------------|-------------------------|
 | Pattern | Assert → allowed/denied | Get feature → record consumption → assert |
-| Assertion class | `ServiceAccessLicenseAssertion` | `RateLimitLicenseAssertion` |
-| Key types | `ServiceAccessLicenseFeature` | `RateLimitLicenseFeature`, `RateLimitLicenseFeatureOperation` |
-| Use case | Premium content, feature flags | API rate limits, usage quotas |
+| Use case | Premium content, feature flags, capability toggles | API rate limits, usage quotas, metered operations |
+| Cardinality | One assertion per check | Multi-step: retrieve → record → assert |
 
-**Critical:** Each feature type has its own specific assertion class. Mixing types causes runtime failures — a feature flag check (using `ServiceAccessLicenseAssertion`) for Access features, a usage limit check (using `RateLimitLicenseAssertion`) for RateLimit features.
+## Implementation Reference
 
-## Step 2: Implement Feature Check
+- Place all licensing-related string literals (feature keys, offering ids, redirect URLs) in a single constants module (e.g. `LicensingConstants.cs` for .NET, `licensingConstants.ts` for React). Reference them by symbol — do NOT inline the literal in business logic. This is mandatory (Phase 14 D-30).
 
 ### Feature Flag Check (Access — Binary Gate)
 
-#### .NET
+Use when: a binary "allowed / not allowed" decision is sufficient (premium gate, capability toggle, feature-flag rollout).
 
-```csharp
-using Sidub.Licensing;
-using Sidub.Licensing.Services;
-using Sidub.Licensing.Features;
-
-public async Task<bool> CheckFeatureAccessAsync(string featureKey)
-{
-    var assertion = ServiceAccessLicenseAssertion.Create(featureKey);
-    var result = await _licensingService.AssertLicense(assertion);
-    return result.IsAllowed;
-}
-```
-
-#### React
-
-```tsx
-import { useLicensingContext } from '@sidub-inc/licensing-client';
-import { ServiceAccessAssertion } from '@sidub-inc/licensing-client';
-
-function FeatureGate({ featureKey, children }) {
-  const client = useLicensingContext();
-  const [allowed, setAllowed] = useState(null);
-
-  useEffect(() => {
-    async function check() {
-      const auth = await client.getAuthorization();
-      const result = await client.assertLicense(
-        ServiceAccessAssertion.create(featureKey), auth
-      );
-      setAllowed(result.isAllowed);
-    }
-    check();
-  }, [client, featureKey]);
-
-  if (allowed === null) return <div>Loading...</div>;
-  if (!allowed) return <div>Upgrade to access this feature.</div>;
-  return <>{children}</>;
-}
-```
+Resolve platform-specific assertion types, call sequence, and runtime wiring through the required resources listed in the workflow before editing code.
 
 ### Usage Limit Check (RateLimit — Metered Consumption)
 
-Usage limit features (RateLimit) follow a multi-step pattern: retrieve the feature, record consumption, then assert the limit.
+Use when: usage must be metered and bounded (API rate limits, per-period quotas, consumption-based features). Pattern is always multi-step — retrieve the feature record, record consumption, then assert whether the limit is still respected.
 
-#### .NET
+<!-- SEM-01-stopgap -->
+> **Unlimited assignments.** In the domain model, `RateLimit = 0` represents an unlimited entitlement. When creating or updating a rate-limit assignment through the `feature_offering` MCP tool, send both `RateLimit` and `SampleSeconds` as the string `"unlimited"`; the tool maps that to the internal zero representation. Non-zero capped values must be positive integers for both fields.
+<!-- /SEM-01-stopgap -->
 
-```csharp
-using Sidub.Licensing;
-using Sidub.Licensing.Services;
-using Sidub.Licensing.Features;
+Rate-limit and consumption exceptions are product signals and must not be silently swallowed. Surface them in logs/UI/validation paths so the user understands when an entitlement or quota blocked the action.
 
-public async Task<bool> ConsumeAndCheckAsync(string featureKey, int amount)
-{
-    // 1. Get the feature to obtain its current state
-    var feature = await _licensingService.GetLicenseFeature<RateLimitLicenseFeature>(featureKey);
-
-    // 2. Record consumption
-    var operation = new RateLimitLicenseFeatureOperation(feature, amount);
-    await _licensingService.RecordConsumption(operation);
-
-    // 3. Assert the limit
-    var assertion = RateLimitLicenseAssertion.Create(featureKey);
-    var result = await _licensingService.AssertLicense(assertion);
-    return result.IsAllowed;
-}
-```
-
-#### React
+**Error-boundary pattern for rate-limit violations** (consumer-built — Monaiq ships
+the typed `RateLimitError`, you build the UI):
 
 ```tsx
-import { useLicensingContext } from '@sidub-inc/licensing-client';
-
-async function consumeFeature(client, featureKey, amount) {
-  const auth = await client.getAuthorization();
-
-  // Record consumption
-  await client.recordConsumption(featureKey, amount, auth);
-
-  // Check if still within limits
-  const assertion = RateLimitAssertion.create(featureKey);
-  const result = await client.assertLicense(assertion, auth);
-  return result.isAllowed;
+class RateLimitBoundary extends React.Component<{children: React.ReactNode}, {hit: boolean}> {
+  state = { hit: false };
+  static getDerivedStateFromError(e: unknown) { return { hit: e instanceof RateLimitError }; }
+  render() { return this.state.hit ? <p>Rate limited — try again soon.</p> : this.props.children; }
 }
 ```
 
-## Step 3: Build and Verify
+### Build and Verify
 
-1. **Build** — Compile the project and resolve any missing namespace imports using `monaiq://domain/namespaces`
-2. **Test the gate** — Invoke the feature check and verify:
-   - Access features return `IsAllowed = true` when the license grants access
-   - RateLimit features return `IsAllowed = true` when consumption is within limits
-3. **Test the deny path** — Verify your application handles the denied case gracefully (upgrade prompt, fallback behavior, etc.)
+Build-and-verify guidance is delivered by `implement_product_feature` step 2 via its `hints` array. Follow those hints after implementing the feature check.
 
+</reference>
+
+<related>
 ## Related Tools
 
-- `implement_product_feature` — Interactive step-by-step feature integration guidance
-- `product` — List products in the catalog
-- `product_feature` — List features for a product
-- `implement_base` — SDK integration (prerequisite)
+- `implement_product_feature` — Interactive step-by-step feature integration (call `startStep=1` then `startStep=2` consecutively).
+- `product` — List products in the catalog.
+- `product_feature` — List features for a product.
+- `implement_base` — SDK integration (prerequisite).
 
 ## Related Resources
 
-- `monaiq://domain/model` — Entity relationships, feature type hierarchy
-- `monaiq://domain/namespaces` — Authoritative type-to-namespace mappings
-- `monaiq://sdk/dotnet/setup` — .NET SDK setup
-- `monaiq://sdk/react/setup` — React SDK setup
-
-</process>
+- `monaiq://domain/model` — Entity relationships and feature-type hierarchy.
+- `monaiq://domain/namespaces` — Authoritative namespace-to-type mappings.
+- `monaiq://platforms/api-surface/dotnet` — .NET assertion types, method signatures, semantics.
+- `monaiq://platforms/api-surface/react` — React assertion types, hook signatures, semantics.
+- `monaiq://platforms/pitfalls/dotnet` — .NET known issues.
+- `monaiq://platforms/pitfalls/react` — React known issues (provider remount, async hook reuse).
+- `monaiq://docs/anti-patterns/dotnet` — .NET anti-patterns for license checks and rate-limit enforcement.
+- `monaiq://docs/anti-patterns/react` — React anti-patterns for license checks and rate-limit enforcement.
+- `monaiq://sdk/dotnet/setup` — .NET SDK runtime wiring narrative.
+- `monaiq://sdk/react/setup` — React SDK runtime wiring narrative.
+</related>
 
 <error-recovery>
 ## Error Recovery
@@ -200,18 +152,18 @@ async function consumeFeature(client, featureKey, amount) {
 | Failure Point | Symptom | Recovery Action |
 |--------------|---------|----------------|
 | Feature not found in catalog | `product_feature` list returns empty or missing feature | Verify the product code is correct. Route to `manage-catalog` to create missing features. |
-| Wrong assertion type used | Runtime type mismatch error | Check the feature's `Kind` field — use `ServiceAccessLicenseAssertion` for Access features, `RateLimitLicenseAssertion` for RateLimit features. |
-| Namespace import errors | Build fails with missing type references | Fetch `monaiq://domain/namespaces` and verify all `using`/`import` statements match the authoritative reference. |
-| AssertLicense returns unexpected result | Feature check returns denied when it should be allowed | Verify the feature is assigned to the user's offering with the correct value (Allowed, not Denied). Check via `feature_offering` tool. |
-| Consumption recording fails | `RecordConsumption` throws error for RateLimit features | Verify the feature type is RateLimit (not Access). Check that the consumption amount is a positive number. |
+| Wrong assertion type used | Runtime type-mismatch error | Check the feature's kind — resolve `monaiq://platforms/api-surface/{platform}` for the correct assertion type per kind, and `monaiq://domain/model` for the kind enum. |
+| Namespace import errors | Build fails with missing type references | Resolve `monaiq://domain/namespaces` and verify all imports match the authoritative reference. |
+| Assertion returns unexpected result | Feature check returns denied when it should be allowed | Verify the feature is assigned to the user's offering with the correct value (Allowed, not Denied). Check via the `feature_offering` tool. |
+| Consumption recording fails | Recording operation throws for RateLimit features | Verify the feature type is RateLimit (not Access). Check that the consumption amount is a positive number. Resolve `monaiq://platforms/pitfalls/{platform}` for platform-specific error modes. |
 
-Feature gate code is additive — failed implementations can be corrected by editing the source file. No rollback needed.
+Feature-gate code is additive — failed implementations can be corrected by editing the source file. No rollback needed.
 </error-recovery>
 
 <success_criteria>
-- Correct assertion class used for each feature type (ServiceAccessLicenseAssertion or RateLimitLicenseAssertion)
-- Feature checks return `IsAllowed = true` for valid licenses with the feature granted
-- Application handles the denied case gracefully
-- No namespace errors — all imports match `monaiq://domain/namespaces` reference
-- Project builds without errors
+- Correct assertion type used for each feature kind (Access vs. RateLimit).
+- Feature checks return allowed for valid licenses with the feature granted.
+- Application handles the denied case gracefully.
+- No namespace errors — all imports match `monaiq://domain/namespaces`.
+- Project builds without errors.
 </success_criteria>
